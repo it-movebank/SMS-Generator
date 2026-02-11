@@ -1,12 +1,16 @@
 /* commands.js
  * Outlook add-in command function for ClickSend SMS verification.
  * Inserts a 6-digit code into the SUBJECT (because ClickSend uses subject as SMS text).
+ *
+ * Notes:
+ * - Function commands must accept a single `event` parameter and call event.completed() when done. [1](https://learn.microsoft.com/en-us/javascript/api/manifest/functionfile?view=word-js-preview)
+ * - The FunctionFile HTML can load this JS file, and the function name must match <FunctionName> in the manifest. [1](https://learn.microsoft.com/en-us/javascript/api/manifest/functionfile?view=word-js-preview)
  */
 
 /** Configuration */
-const PLACEHOLDER = "{{CODE6}}";           // If present in subject, replace it.
-const APPEND_TEXT = " Verification code: "; // If not present, append this + code.
-const MAX_SMS_LEN = 255;                   // ClickSend guidance (warn if exceeded).
+const PLACEHOLDER = "{{CODE6}}";             // If present in subject, replace it.
+const APPEND_TEXT = " Verification code: ";  // If not present, append this + code.
+const MAX_SMS_LEN = 255;                     // ClickSend guidance (warn if exceeded).
 
 /** Generate a 6-digit numeric code string. */
 function generate6DigitCode() {
@@ -18,7 +22,7 @@ function generate6DigitCode() {
       return String(code);
     }
   } catch (e) {
-    // fallback below
+    // fall through to Math.random
   }
   return String(Math.floor(Math.random() * 900000) + 100000);
 }
@@ -27,7 +31,7 @@ function generate6DigitCode() {
 function notify(message, type) {
   // type: "informationalMessage" | "errorMessage"
   try {
-    const item = Office.context.mailbox.item;
+    const item = Office.context.mailbox && Office.context.mailbox.item;
     if (item && item.notificationMessages && item.notificationMessages.replaceAsync) {
       item.notificationMessages.replaceAsync("smsVerifyCodeNotice", {
         type: type || "informationalMessage",
@@ -51,9 +55,10 @@ function notify(message, type) {
 function insertVerifyCode(event) {
   const item = Office.context.mailbox && Office.context.mailbox.item;
 
+  // Guard: this command is intended for compose forms
   if (!item || !item.subject || !item.subject.getAsync) {
     notify("This command is available only while composing a message.", "errorMessage");
-    if (event && event.completed) event.completed();
+    if (event && typeof event.completed === "function") event.completed();
     return;
   }
 
@@ -62,7 +67,7 @@ function insertVerifyCode(event) {
   item.subject.getAsync(function (getResult) {
     if (getResult.status !== Office.AsyncResultStatus.Succeeded) {
       notify("Unable to read the subject. Please try again.", "errorMessage");
-      if (event && event.completed) event.completed();
+      if (event && typeof event.completed === "function") event.completed();
       return;
     }
 
@@ -91,12 +96,21 @@ function insertVerifyCode(event) {
         notify(`Verification code inserted: ${code}`, "informationalMessage");
       }
 
-      if (event && event.completed) event.completed();
+      if (event && typeof event.completed === "function") event.completed();
     });
   });
 }
 
-/** Initialize and expose the command function globally for ExecuteFunction. */
+/**
+ * Initialize and register the command.
+ * The FunctionFile HTML must initialize Office.js and define/register the named function used by <FunctionName>. [1](https://learn.microsoft.com/en-us/javascript/api/manifest/functionfile?view=word-js-preview)
+ */
 Office.onReady(function () {
+  // Recommended: explicitly associate the function name from the manifest with this handler.
+  if (Office.actions && typeof Office.actions.associate === "function") {
+    Office.actions.associate("insertVerifyCode", insertVerifyCode);
+  }
+
+  // Optional fallback: expose globally (can help in older clients / debugging).
   window.insertVerifyCode = insertVerifyCode;
 });
