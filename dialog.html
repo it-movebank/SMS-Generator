@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Enter mobile number</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <script src="./dialog.js"></script>
+  <style>
+    body { font-family: Segoe UI, Arial, sans-serif; padding: 16px; }
+    label { display:block; margin-bottom: 8px; font-weight: 600; }
+    input { width: 100%; padding: 10px; font-size: 16px; box-sizing: border-box; }
+    button { margin-top: 12px; padding: 10px 14px; font-size: 14px; }
+    .hint { margin-top: 8px; color: #666; font-size: 12px; }
+    .err { margin-top: 8px; color: #b00020; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <label for="mobile">Enter mobile number:</label>
+  <input id="mobile" type="tel" inputmode="numeric" placeholder="04xxxxxxxx" autocomplete="off" />
+  <button id="ok">Add recipient</button>
+  <div class="hint">We’ll add it as: &lt;mobile&gt;@sms.clicksend.com</div>
+  <div id="err" class="err"></div>
+</body>
+</html>
