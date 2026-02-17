@@ -6,10 +6,10 @@
   xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
   xsi:type="MailApp">
 
-  <Id>d1b0b4f8-1e1c-4c7b-9e72-1c4b5e0f2a9d</Id>
-  <Version>2.0.0.5</Version> <ProviderName>MOVE Bank</ProviderName>
+  <Id>8f3c9b9e-4c6a-4e2a-9a2b-6c6f1d9e7a41</Id>
+  <Version>2.0.0.6</Version>
+  <ProviderName>MOVE Bank</ProviderName>
   <DefaultLocale>en-AU</DefaultLocale>
-
   <DisplayName DefaultValue="SMS Verification Tool" />
   <Description DefaultValue="One-click tool to set ClickSend recipient and insert 6-digit code." />
 
