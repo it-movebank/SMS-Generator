@@ -84,3 +84,40 @@
                     <bt:Image size="32" resid="Icon.32" />
                     <bt:Image size="80" resid="Icon.80" />
                   </Icon>
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>insertVerifyCode</FunctionName>
+                  </Action>
+                </Control>
+
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16" DefaultValue="https://it-movebank.github.io/SMS-Generator/icon-16.png" />
+        <bt:Image id="Icon.32" DefaultValue="https://it-movebank.github.io/SMS-Generator/icon-32.png" />
+        <bt:Image id="Icon.80" DefaultValue="https://it-movebank.github.io/SMS-Generator/icon-80.png" />
+      </bt:Images>
+
+      <bt:Urls>
+        <bt:Url id="Commands.Url" DefaultValue="https://it-movebank.github.io/SMS-Generator/commands.html" />
+      </bt:Urls>
+
+      <bt:ShortStrings>
+        <bt:String id="Group.Label" DefaultValue="SMS Tools" />
+        <bt:String id="Button.Label" DefaultValue="Insert 6-digit code" />
+        <bt:String id="Button.Title" DefaultValue="Insert verification code" />
+      </bt:ShortStrings>
+
+      <bt:LongStrings>
+        <bt:String id="Button.Tooltip" DefaultValue="If needed, prompts for a mobile number to set the ClickSend recipient, then inserts a 6-digit code into the Subject." />
+      </bt:LongStrings>
+    </Resources>
+
+  </VersionOverrides>
+</OfficeApp>
